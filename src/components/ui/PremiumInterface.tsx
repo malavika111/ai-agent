@@ -13,7 +13,7 @@ export function PremiumInterfaceProvider() {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
-  
+
   return (
     <>
       <MultiLayerBackground />
@@ -28,12 +28,21 @@ function MultiLayerBackground() {
   const mouseY = useMotionValue(0)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const handleMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX - typeof window !== 'undefined' ? window.innerWidth / 2 : 0)
-      mouseY.set(e.clientY - typeof window !== 'undefined' ? window.innerHeight / 2 : 0)
+      const centerX = window.innerWidth / 2
+      const centerY = window.innerHeight / 2
+
+      mouseX.set(e.clientX - centerX)
+      mouseY.set(e.clientY - centerY)
     }
+
     window.addEventListener('mousemove', handleMove)
-    return () => window.removeEventListener('mousemove', handleMove)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove)
+    }
   }, [mouseX, mouseY])
 
   const x1 = useTransform(mouseX, [-500, 500], [20, -20])
@@ -45,23 +54,23 @@ function MultiLayerBackground() {
     <div className="fixed inset-0 -z-50 overflow-hidden bg-background pointer-events-none">
       {/* Noise Overlay */}
       <div className="absolute inset-0 noise z-30 opacity-[0.03] dark:opacity-[0.05]"></div>
-      
+
       {/* Layer 1: Dot Grid */}
-      <div 
-        className="absolute inset-0 z-0 opacity-[0.1]" 
-        style={{ 
-          backgroundImage: 'radial-gradient(circle, var(--foreground) 1px, transparent 1px)', 
-          backgroundSize: '40px 40px' 
-        }} 
+      <div
+        className="absolute inset-0 z-0 opacity-[0.1]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, var(--foreground) 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
       />
 
       {/* Layer 2: Mesh Gradients */}
-      <motion.div 
+      <motion.div
         style={{ x: x1, y: y1 }}
         className="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] blur-[120px] bg-black/[0.04] dark:bg-white/[0.03] rounded-full animate-float"
       />
-      
-      <motion.div 
+
+      <motion.div
         style={{ x: x2, y: y2 }}
         className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] blur-[150px] bg-black/[0.05] dark:bg-white/[0.04] rounded-full animate-float animation-delay-2000"
       />
@@ -114,12 +123,12 @@ function AdvancedCursor() {
       if (!isVisible) setIsVisible(true)
 
       const target = e.target as HTMLElement
-      const isSelectable = window.getComputedStyle(target).cursor === 'pointer' || 
-                           target.tagName === 'BUTTON' || 
-                           target.tagName === 'A' || 
-                           target.closest('button') || 
-                           target.closest('a')
-      
+      const isSelectable = window.getComputedStyle(target).cursor === 'pointer' ||
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'A' ||
+        target.closest('button') ||
+        target.closest('a')
+
       setIsPointer(!!isSelectable)
     }
 
@@ -150,7 +159,7 @@ function AdvancedCursor() {
         }}
         className="fixed w-1.5 h-1.5 bg-foreground rounded-full mix-blend-difference"
       />
-      
+
       {/* Outer Ring (Spring trailing) */}
       <motion.div
         style={{
