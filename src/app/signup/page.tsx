@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { signup, signInWithGoogle } from '../login/actions'
+import { signup } from '../login/actions'
+import { createClient } from '@/utils/supabase/client'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { UserPlus, Lock, KeyRound, ShieldCheck, Loader2, Mail, User, Eye, EyeOff } from 'lucide-react'
@@ -22,6 +23,16 @@ function SignupContent() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [validationError, setValidationError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  const handleGoogleLogin = async () => {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}`
+      }
+    })
+  }
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -215,7 +226,7 @@ function SignupContent() {
             <motion.button
               whileHover={{ y: -2, scale: 1.01, backgroundColor: 'rgba(0,0,0,0.02)' }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => signInWithGoogle()}
+              onClick={handleGoogleLogin}
               className="flex w-full items-center justify-center gap-4 rounded-2xl border border-border/60 bg-transparent py-4 text-[10px] font-black uppercase tracking-[0.3em] text-foreground transition-all shadow-sm"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">
