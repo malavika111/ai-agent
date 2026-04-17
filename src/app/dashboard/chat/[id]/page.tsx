@@ -2,10 +2,10 @@ import { ChatInterface } from '@/components/chat/ChatInterface'
 import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
 
-export default async function ExistingChatPage({ 
+export default async function ExistingChatPage({
   params,
-  searchParams 
-}: { 
+  searchParams
+}: {
   params: Promise<{ id: string }>,
   searchParams: Promise<{ doc?: string }>
 }) {
@@ -40,10 +40,9 @@ export default async function ExistingChatPage({
 
   return (
     <div className="h-full">
-      <ChatInterface 
-        sessionId={id} 
-        initialMessages={initialMessages} 
-        initialDocumentId={doc} 
+      <ChatInterface
+        initialMessages={initialMessages}
+        initialDocumentId={doc}
       />
     </div>
   )
