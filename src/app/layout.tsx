@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   description: "RAG-based support agent using Supabase and vector search.",
 };
 
+import AuthListener from "@/components/auth/AuthListener";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,6 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col relative overflow-x-hidden">
         <ClientVisualWrapper />
+        <AuthListener />
         {children}
       </body>
     </html>

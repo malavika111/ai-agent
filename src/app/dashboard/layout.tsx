@@ -9,16 +9,16 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createClient()
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  if (!user) {
+  if (!session) {
     redirect('/login')
   }
 
   return (
     <div className="flex h-screen overflow-hidden bg-background/50">
-      <Sidebar userEmail={user.email || ''} />
+      <Sidebar userEmail={session.user.email || ''} />
       
       <main className="flex-1 flex flex-col h-full bg-transparent overflow-hidden">
         <div className="h-full w-full rounded-none md:rounded-tl-[4rem] bg-card/40 backdrop-blur-3xl border-l border-t border-foreground/5 shadow-2xl relative transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]">
